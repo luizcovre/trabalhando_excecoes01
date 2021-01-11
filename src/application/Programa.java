@@ -34,13 +34,10 @@ public class Programa {
 			System.out.print("Data do check-out (dd/mm/aaaa): ");
 			checkOut = dataSimples.parse(read.next());
 			
-			Date hoje = new Date();
-			if (checkIn.before(hoje) || checkOut.before(hoje)) {
-				System.out.println("Erro! - As novas datas devem ser futuras");
-			}else if (!checkOut.after(checkIn)) {
-				System.out.println("Erro! - O check-out deve ser posterior a data do check-in");
-			}else {
-				reserva.atualizaDatas(checkIn, checkOut);
+			String erro = reserva.atualizaDatas(checkIn, checkOut);
+			if (erro != null) {
+				System.out.println("Erro! - " + erro);
+			} else {
 				System.out.println("Reserva: " + reserva);
 			}
 		}
