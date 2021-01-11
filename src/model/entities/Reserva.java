@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import model.exceptions.ExcecaoDominio;
+
 public class Reserva {
 
 	private Integer numeroQuarto;
@@ -16,6 +18,9 @@ public class Reserva {
 	}
 
 	public Reserva(Integer numeroQuarto, Date checkIn, Date checkOut) {
+		if (!checkOut.after(checkIn)) {
+			throw new ExcecaoDominio("Erro! - O check-out deve ser posterior a data do check-in");
+		}
 		this.numeroQuarto = numeroQuarto;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
@@ -42,17 +47,16 @@ public class Reserva {
 		return TimeUnit.DAYS.convert(diferenca, TimeUnit.MILLISECONDS);
 	}
 	
-	public String atualizaDatas(Date checkIn, Date checkOut) {
+	public void atualizaDatas(Date checkIn, Date checkOut) {
 		Date hoje = new Date();
 		if (checkIn.before(hoje) || checkOut.before(hoje)) {
-			return "Erro! - As novas datas devem ser futuras";
+			throw new ExcecaoDominio("Erro! - As novas datas devem ser futuras");
 		}
 		if (!checkOut.after(checkIn)) {
-			return "Erro! - O check-out deve ser posterior a data do check-in";
+			throw new ExcecaoDominio("Erro! - O check-out deve ser posterior a data do check-in");
 		}
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
-		return null;
 	}
 
 	@Override
